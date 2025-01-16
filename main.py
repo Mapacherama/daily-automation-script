@@ -1,21 +1,26 @@
+import schedule
+import time
 from modules.weather import fetch_weather
 from modules.news import fetch_news
 from modules.todo import fetch_todo
 
-def print_divider():
-    print("\n" + "=" * 50 + "\n")
-
-if __name__ == "__main__":
-    print_divider()
-    print("🌤️  Today's Weather:")
+def run_morning_brief():
+    print("\n===== Morning Brief =====")
+    print("\n🌤️  Today's Weather:")
     fetch_weather()
 
-    print_divider()
-    print("📰  Today's Top News:")
+    print("\n📰  Today's Top News:")
     fetch_news()
 
-    print_divider()
-    print("✅  To-Do List:")
+    print("\n✅  To-Do List:")
     fetch_todo()
 
-    print_divider() 
+    print("\n=========================")
+
+# Schedule the script
+schedule.every().day.at("08:00").do(run_morning_brief)
+
+print("🕒 Morning Brief scheduled. It will run at 08:00 every day.")
+while True:
+    schedule.run_pending()
+    time.sleep(1)
