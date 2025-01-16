@@ -1,0 +1,5 @@
+requests
+beautifulsoup4
+schedule
+pyttsx3
+google-api-python-client
