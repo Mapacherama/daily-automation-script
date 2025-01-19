@@ -1,5 +1,6 @@
 import os
 
+from modules.hydration import get_hydration_data
 from modules.news import fetch_news
 from modules.todo import fetch_todo
 from modules.weather import fetch_weather
@@ -21,12 +22,15 @@ def run_morning_brief():
     news = "📰 News:\n" + "\n".join([f"{idx+1}. {headline}" for idx, headline in enumerate(fetch_news())])
     todo = "✅ To-Do:\n" + "\n".join(fetch_todo())
 
-    # Print brief
-    print("\n===== Morning Brief =====")
-    print(weather)
-    print(news)
-    print(todo)
-    print("\n=========================")
+    hydration_data = get_hydration_data()
+    hydration_status = f"💧 Hydration:\nTotal intake: {hydration_data['intake_ml']} ml."
 
-    # Send email
-    send_email("Morning Brief", f"{weather}\n\n{news}\n\n{todo}")
+    schedule_brief()
+    
+    # Prepare and send brief
+    brief = f"{weather}\n\n{news}\n\n{todo}\n\n{hydration_status}"
+    print("\n===== Morning Brief =====")
+    print(brief)
+    print("=========================")
+    send_email("Morning Brief", brief)
+
