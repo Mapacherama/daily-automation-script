@@ -9,10 +9,20 @@ from modules.weather import fetch_weather
 
 load_dotenv()
 
+import schedule
+import time
+
+def schedule_brief():
+    schedule_time = os.getenv("SCHEDULE_TIME", "07:00")
+    schedule.every().day.at(schedule_time).do(run_morning_brief)
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
 def send_email(subject, body):
     sender_email = os.getenv("EMAIL")
     sender_password = os.getenv("PASSWORD")
-    recipient_email = sender_email  # Send to yourself
+    recipient_email = sender_email
 
     msg = MIMEText(body)
     msg["Subject"] = subject
