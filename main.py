@@ -5,13 +5,20 @@ from modules.todo import fetch_todo
 from modules.weather import fetch_weather
 from modules.email import send_email
 from modules.db import create_tables
+from flask_cors import CORS
+import sqlite3
+from modules.db import create_tables
 
 import schedule
 # Initialize Flask app
 app = Flask(__name__)
+CORS(app)
 
-# Initialize database
-create_tables()
+# Connect to the SQLite database
+def connect_db():
+    conn = sqlite3.connect("data.db")
+    conn.row_factory = sqlite3.Row
+    return conn
 
 # Endpoint to fetch weather data
 @app.route('/weather', methods=['GET'])
@@ -95,4 +102,5 @@ def run_morning_brief():
 
 # Run the Flask app
 if __name__ == '__main__':
+    create_tables()
     app.run(debug=True)

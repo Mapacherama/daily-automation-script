@@ -1,5 +1,6 @@
 import sqlite3
 from datetime import date
+from plyer import notification
 
 DB_FILE = "hydration.db"
 
@@ -37,3 +38,20 @@ def save_hydration_data(data):
         cursor = conn.cursor()
         cursor.execute("UPDATE hydration SET intake_ml = ? WHERE date = ?", (data["intake_ml"], data["date"]))
         conn.commit()
+
+def remind_hydration():
+    title = "💧 Hydration Reminder"
+    message = "It's time to drink some water and stay hydrated!"
+    notification.notify(
+        title=title,
+        message=message,
+        app_name="Personal Assistant",
+        timeout=10  # Notification disappears after 10 seconds
+    )
+    print("💧 Reminder: Time to hydrate! Notification sent.")
+    
+    # Automatically log 200 ml of water intake after a reminder
+    data = get_hydration_data()
+    data["intake_ml"] += 200  # Add 200 ml as default intake
+    save_hydration_data(data)
+    print(f"💧 Logged 200 ml. Total intake today: {data['intake_ml']} ml.")
