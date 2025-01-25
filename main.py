@@ -16,8 +16,19 @@ create_tables()
 # Endpoint to fetch weather data
 @app.route('/weather', methods=['GET'])
 def get_weather():
-    weather = fetch_weather()
-    return jsonify({"weather": weather})
+    try:
+        weather = fetch_weather()
+        return jsonify({"weather": weather, "status": "success"}), 200
+    except ConnectionError:
+        return jsonify({
+            "error": "Failed to connect to weather service",
+            "status": "error"
+        }), 503
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "status": "error"
+        }), 500
 
 # Endpoint to fetch news headlines
 @app.route('/news', methods=['GET'])
